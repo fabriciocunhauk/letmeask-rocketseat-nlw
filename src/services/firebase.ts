@@ -5,7 +5,7 @@ import { initializeApp } from "firebase/app";
 
 // Services to use for
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { getDatabase } from 'firebase/database';
+import { getDatabase, ref, set } from 'firebase/database';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -28,5 +28,7 @@ export {
     auth,
     GoogleAuthProvider,
     signInWithPopup,
-    database
+    database,
+    ref,
+    set
 }
