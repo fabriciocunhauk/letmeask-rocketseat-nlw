@@ -10,7 +10,7 @@ import { useAuth } from '../hooks/useAuth';
 
 import '../styles/auth.scss';
 
-export const Home = () => {
+export function Home() {
     const history = useHistory();
     const { user, signinWithGoogle } = useAuth();
 

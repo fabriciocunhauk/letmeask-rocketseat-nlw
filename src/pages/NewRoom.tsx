@@ -12,7 +12,7 @@ import { useAuth } from '../hooks/useAuth';
 
 import '../styles/auth.scss';
 
-export const NewRoom = () => {
+export function NewRoom() {
     const { user } = useAuth();
 
     const [newRoom, setNewRoom] = useState('');
