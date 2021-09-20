@@ -1,11 +1,10 @@
-import { FormEvent, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import logoImg from '../assets/images/logo.svg';
+import deleteImg from '../assets/images/delete.svg';
 import { Button } from "../components/Button";
 import { Question } from '../components/Questions';
 import { RoomCode } from '../components/RoomCode';
-import { useAuth } from '../hooks/useAuth';
 import { useRoom } from '../hooks/useRoom';
 import { database } from '../services/firebase';
 
@@ -16,37 +15,16 @@ type RoomParams = {
 }
 
 export function AdminRoom() {
-    const [newQuestion, setNewQuestion] = useState('');
-
     const params = useParams<RoomParams>();
     const roomId = params.id;
 
-    const { user } = useAuth();
+    // const { user } = useAuth();
     const { questions, title } = useRoom(roomId);
 
-    async function handleSendQuestion(event: FormEvent) {
-        event.preventDefault();
-        if (newQuestion.trim() === '') {
-            return;
+    async function handleDeleteQuestion(questionId: string) {
+        if (window.confirm('Tem certeza que voce deseja excluir esta pergunta?')) {
+            await database.ref(`rooms/${roomId}/questions/${questionId}`).remove()
         }
-
-        if (!user) {
-            throw new Error('You must be logged in');
-        }
-
-        const question = {
-            content: newQuestion,
-            author: {
-                name: user.name,
-                avatar: user.avatar,
-            },
-            isHighlighted: false,
-            isAnswered: false,
-        }
-
-        await database.ref(`rooms/${roomId}/questions`).push(question);
-
-        setNewQuestion('');
     }
 
     return (
@@ -73,7 +51,13 @@ export function AdminRoom() {
                                 key={question.id}
                                 content={question.content}
                                 author={question.author}
-                            />
+                            >
+                                <button
+                                    onClick={() => handleDeleteQuestion(question.id)}
+                                >
+                                    <img src={deleteImg} alt="Remover pergunta" />
+                                </button>
+                            </Question>
                         )
                     }))}
                 </div>
